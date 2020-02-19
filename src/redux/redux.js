@@ -3,7 +3,8 @@ import { createStore } from "redux";
 const initialState = {
   selectedGenre: null,
   playList: [],
-  weather: { type: null, temperature: null }
+  weather: { type: null, temperature: null },
+  currentMusicURI: null
 };
 
 export const switchView = genre => ({
@@ -20,27 +21,31 @@ export const setWeather = weather => ({
   type: "SET_WEATHER",
   weather
 });
-
+export const setCurrentMusicURI = currentMusicURI => ({
+  type: "SET_CURRENT_MUSIC_URI",
+  currentMusicURI
+});
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "SWITCH_VIEW":
       return {
-        selectedGenre: action.genre,
-        playList: state.playList,
-        weather: state.weather
+        ...state,
+        selectedGenre: action.genre
       };
     case "SET_PLAYLIST":
-      console.log("action :", action);
       return {
-        selectedGenre: state.genre,
-        playList: action.playList,
-        weather: state.weather
+        ...state,
+        playList: action.playList
       };
     case "SET_WEATHER":
       return {
-        selectedGenre: state.genre,
-        playList: state.playList,
+        ...state,
         weather: action.weather
+      };
+    case "SET_CURRENT_MUSIC_URI":
+      return {
+        ...state,
+        currentMusicURI: action.currentMusicURI
       };
     default:
       return state;
