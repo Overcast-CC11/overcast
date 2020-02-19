@@ -1,0 +1,28 @@
+acousticness	float
+
+danceability	float
+energy	float
+liveness	float
+
+loudness	float
+mode	int
+speechiness	float
+
+tempo	float
+time_signature	int
+
+valence	float
+
+popularity	int
+
+
+
+Sunny = [clear-day] danceability (1) and energy (1) 
+Rainy = [rain] Accousticness (1) energy (0.3) and valence(0.5)
+Snowy = [snow, sleet, hail] energy(0.5) valance(0.8)
+Cloudy = [fog, cloudy, partly-cloudy-day] energy(0.2) danceability (0.2) valance (0.3)
+Windy = [wind, thunderstorm, tornado] Accousticness (0.2) valance (0.3) danceability (0.8)
+Night = [clear-night, partly-cloudy-night] valance (1) Accousticness(0.8)
+Valance(0.5)
+Popularity (min_70)
+If (temp > 28) then something…
