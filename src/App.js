@@ -1,24 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import Header from "./components/Header";
+import GenreList from "./components/GenreList";
+import PlayList from "./components/PlayList";
+import "./App.css";
+import { useSelector, useDispatch } from "react-redux";
+import { setWeather, setPlayList } from "./redux/redux";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    //Do something
+    //Test Data
+    const testWeather = { type: "sunny", temperature: "20" };
+    const testPlayList = [
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" },
+      { songName: "song name", artistName: "artist name", songLength: "9:32" }
+    ];
+    dispatch(setWeather(testWeather));
+    dispatch(setPlayList(testPlayList));
+  }, []);
+
+  const setDisplay = () => {
+    if (selectedGenre) {
+      return <PlayList />;
+    } else {
+      return <GenreList />;
+    }
+  };
+  const selectedGenre = useSelector(state => state.selectedGenre);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <div className="container">{setDisplay()}</div>
     </div>
   );
 }
