@@ -50,10 +50,10 @@ const spotifyApi = new SpotifyWebApi({
   clientSecret: process.env.CLIENT_SECRET
 });
 
-router.post("/playlist/", (req, res) => {
+router.post("/playlist/", async (req, res) => {
   // console.log(req.body);
   const user = req.body;
-  axios(
+  const weather = await axios(
     `https://dark-sky.p.rapidapi.com/${user.longtitude},${user.latitude}?lang=en&units=auto`,
     {
       method: "GET",
@@ -62,63 +62,103 @@ router.post("/playlist/", (req, res) => {
         "x-rapidapi-key": "0255a54ceemsh45294c7d628c63bp1698e6jsnea8150048dff"
       }
     }
-  )
-    .then(response => {
-      const weather = response.data.currently.icon;
-      return weatherTable.find(w => {
-        const value = Object.values(w);
+  );
+  const icon = weather.data.currently.icon;
+  const weatherFixed = weatherTable.find(w => {
+    const value = Object.values(w);
+    return value[0].includes(icon);
+  });
+  const key = Object.keys(weatherFixed).pop();
+  let seed;
+  for (let item in seedTable) {
+    if (item === weather) seed = seedTable[item];
+  }
 
-        return value[0].includes(weather);
-      });
-    })
-    .then(response => {
-      const weather = Object.keys(response).pop();
-      let seed;
-      for (let item in seedTable) {
-        if (item === weather) seed = seedTable[item];
-      }
-
-      return axios({
-        url: "https://accounts.spotify.com/api/token",
-        method: "post",
-        params: {
-          grant_type: "client_credentials"
-        },
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        auth: {
-          username: process.env.CLIENT_ID,
-          password: process.env.CLIENT_SECRET
-        }
-      }).then(response => {
-        spotifyApi.setAccessToken(response.data.access_token);
-        let playList;
-        spotifyApi.getRecommendations(
-          {
-            min_energy: 0.4,
-            seed_genres: ["country"],
-            min_popularity: 0
-          },
-          function(err, data) {
-            if (err) {
-              console.error("Something went wrong!");
-            } else {
-              playList = data.body;
-              console.log(playList)
-              return data.body;
-            }
-          }
-        );
-        console.log(playList)
+  const token = await axios({
+    url: "https://accounts.spotify.com/api/token",
+    method: "post",
+    params: {
+      grant_type: "client_credentials"
+    },
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    auth: {
+      username: process.env.CLIENT_ID,
+      password: process.env.CLIENT_SECRET
+    }
+  });
+  console.log(token.data.access_token);
+  spotifyApi.setAccessToken(token.data.access_token);
+  let playList;
+  const list = await spotifyApi.getRecommendations(
+    {
+      min_energy: 0.4,
+      seed_genres: ["country"],
+      min_popularity: 0
+    },
+    async function(err, data) {
+      if (err) {
+        console.error("Something went wrong!", err);
+      } else {
+        console.log("OK", data);
+        console.log("OK", data.body.tracks[0]);
+        playList = await data.body;
         return playList;
-      });
-    })
-    .then(res => {
-      console.log(res);
-    })
-    .catch(function(error) {});
+      }
+    }
+  );
+  // .then(res => console.log(res.body));
+
+  // console.log("spotifyApi :", spotifyApi);
+  // spotifyApi.getUserPlaylists("Overcast").then(
+  //   function(data) {
+  //     console.log("Retrieved playlists", data.body);
+  //   },
+  //   function(err) {
+  //     console.log("Something went wrong! getUserPlaylists", err);
+  //   }
+  // );
+
+  // spotifyApi.getUserPlaylists("4V5Nhc1KlyGirLFDPsxTuj").then(
+  //   function(data) {
+  //     console.log("Retrieved playlists", data.body);
+  //   },
+  //   function(err) {
+  //     console.log("Something went wrong! getUserPlaylists", err);
+  //   }
+  // );
+  // spotifyApi
+  //   .addTracksToPlaylist("4V5Nhc1KlyGirLFDPsxTuj", [
+  //     "spotify:track:4iV5W9uYEdYUVa79Axb7Rh",
+  //     "spotify:track:1301WleyT98MSxVHPZCA6M"
+  //   ])
+  //   .then(
+  //     function(data) {
+  //       console.log("Added tracks to playlist!", data);
+  //     },
+  //     function(err) {
+  //       console.log("Something went wrong addTracksToPlaylist!", err);
+  //     }
+  //   );
+  // spotifyApi.getUserPlaylists("Overcast").then(
+  //   function(data) {
+  //     console.log("Retrieved playlists", data.body);
+  //   },
+  //   function(err) {
+  //     console.log("Something went wrong! getUserPlaylists", err);
+  //   }
+  // );
+  // spotifyApi.createPlaylist("My Cool Playlist", { public: true }).then(
+  //   function(data) {
+  //     console.log("Created playlist!");
+  //   },
+  //   function(err) {
+  //     console.log("Something went wrong!", err);
+  //   }
+  // );
+  // console.log(list);
 });
 
 module.exports = router;
