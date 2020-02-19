@@ -53,26 +53,26 @@ const spotifyApi = new SpotifyWebApi({
 router.post("/playlist/", async (req, res) => {
   // console.log(req.body);
   const user = req.body;
-  const weather = await axios(
-    `https://dark-sky.p.rapidapi.com/${user.longtitude},${user.latitude}?lang=en&units=auto`,
-    {
-      method: "GET",
-      headers: {
-        "x-rapidapi-host": "dark-sky.p.rapidapi.com",
-        "x-rapidapi-key": "0255a54ceemsh45294c7d628c63bp1698e6jsnea8150048dff"
-      }
-    }
-  );
-  const icon = weather.data.currently.icon;
-  const weatherFixed = weatherTable.find(w => {
-    const value = Object.values(w);
-    return value[0].includes(icon);
-  });
-  const key = Object.keys(weatherFixed).pop();
-  let seed;
-  for (let item in seedTable) {
-    if (item === weather) seed = seedTable[item];
-  }
+  // const weather = await axios(
+  //   `https://dark-sky.p.rapidapi.com/${user.longtitude},${user.latitude}?lang=en&units=auto`,
+  //   {
+  //     method: "GET",
+  //     headers: {
+  //       "x-rapidapi-host": "dark-sky.p.rapidapi.com",
+  //       "x-rapidapi-key": "0255a54ceemsh45294c7d628c63bp1698e6jsnea8150048dff"
+  //     }
+  //   }
+  // );
+  // const icon = weather.data.currently.icon;
+  // const weatherFixed = weatherTable.find(w => {
+  //   const value = Object.values(w);
+  //   return value[0].includes(icon);
+  // });
+  // const key = Object.keys(weatherFixed).pop();
+  // let seed;
+  // for (let item in seedTable) {
+  //   if (item === weather) seed = seedTable[item];
+  // }
 
   const token = await axios({
     url: "https://accounts.spotify.com/api/token",
@@ -91,25 +91,42 @@ router.post("/playlist/", async (req, res) => {
   });
   console.log(token.data.access_token);
   spotifyApi.setAccessToken(token.data.access_token);
-  let playList;
-  const list = await spotifyApi.getRecommendations(
-    {
-      min_energy: 0.4,
-      seed_genres: ["country"],
-      min_popularity: 0
-    },
-    async function(err, data) {
-      if (err) {
-        console.error("Something went wrong!", err);
-      } else {
-        console.log("OK", data);
-        console.log("OK", data.body.tracks[0]);
-        playList = await data.body;
-        return playList;
+
+  const allInfo = await spotifyApi
+    .getRecommendations(
+      {
+        min_energy: 0.4,
+        seed_genres: ["country"],
+        min_popularity: 0
       }
-    }
-  );
-  // .then(res => console.log(res.body));
+      // async function(err, data) {
+      //   if (err) {
+      //     console.error("Something went wrong!", err);
+      //   } else {
+
+      // console.log("song_name", data.body.tracks[0].name);
+      // console.log("name", data.body.tracks[0].artists[0].name);
+      // console.log("uri", data.body.tracks[0].uri);
+      // console.log("duration_ms", data.body.tracks[0].duration_ms);
+      // playList = await data.body;
+      //     return data;
+      //   }
+      // }
+    )
+    .then(data => {
+      return data.body.tracks.map(song => {
+        return {
+          songName: song.name,
+          artistName: song.artists[0].name,
+          songUri: song.uri,
+          songLength: song.duration_ms
+        };
+      });
+    })
+
+    
+    // .then(data => console.log(data))
+    console.log(allInfo)
 
   // console.log("spotifyApi :", spotifyApi);
   // spotifyApi.getUserPlaylists("Overcast").then(
