@@ -1,11 +1,17 @@
-import React from 'react';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { switchView } from "../redux/redux";
 
-function Genre() {
-    return (
+function Genre(props) {
+  const genreName = props.name;
+  const dispatch = useDispatch();
+  return (
     <div className="genre">
-    <div className="genrePic"></div>
+      <div className="genrePic" onClick={() => dispatch(switchView(genreName))}>
+        <div className="genreText">{genreName}</div>
+      </div>
     </div>
-    )
+  );
 }
 
 export default Genre;
