@@ -125,8 +125,8 @@ router.post("/playlist/", async (req, res) => {
     })
 
     
-    // .then(data => console.log(data))
     console.log(allInfo)
+return res.status(200).send(allInfo)
 
   // console.log("spotifyApi :", spotifyApi);
   // spotifyApi.getUserPlaylists("Overcast").then(
