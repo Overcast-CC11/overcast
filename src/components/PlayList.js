@@ -9,12 +9,13 @@ function PlayList() {
     height: "95%"
   };
   const playList = useSelector(state => state.playList);
-
+  const currentMusicURI = useSelector(state => state.currentMusicURI);
+  console.log("currentMusicURI :", currentMusicURI);
   return (
     <div className="PlayList">
       <div className="Player">
         <SpotifyPlayer
-          uri="spotify:track:7lEptt4wbM0yJTvSG5EBof"
+          uri={currentMusicURI}
           size={size}
           view="coverart"
           theme="white"
@@ -26,9 +27,11 @@ function PlayList() {
           {playList.map(song => {
             return (
               <Song
+                key={song.songUri}
                 songName={song.songName}
                 artistName={song.artistName}
                 songLength={song.songLength}
+                songUri={song.songUri}
               />
             );
           })}
