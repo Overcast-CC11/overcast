@@ -2,23 +2,7 @@ import { createStore } from "redux";
 
 const initialState = {
   selectedGenre: null,
-  playList: [
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" },
-    { songName: "song name", artistName: "artist name", songLength: "9:32" }
-  ],
+  playList: [],
   weather: { type: null, temperature: null }
 };
 
@@ -27,9 +11,9 @@ export const switchView = genre => ({
   genre
 });
 
-export const setPlayList = playlist => ({
+export const setPlayList = playList => ({
   type: "SET_PLAYLIST",
-  playlist
+  playList
 });
 
 export const setWeather = weather => ({
@@ -46,6 +30,7 @@ export const reducer = (state = initialState, action) => {
         weather: state.weather
       };
     case "SET_PLAYLIST":
+      console.log("action :", action);
       return {
         selectedGenre: state.genre,
         playList: action.playList,
