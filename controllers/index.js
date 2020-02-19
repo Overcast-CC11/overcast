@@ -39,40 +39,48 @@ const seedTable = {
     max_valance: 0.4,
     max_danceability: 0.8,
     min_popularity: 70
-  }
+  },
+  night: { min_valance: 0.8, min_accousticness: 0.7, min_popularity: 70 }
 };
-const night = { min_valance: 0.8, min_accousticness: 0.7, min_popularity: 70 };
 // Valance(0.5)
 // Popularity (min_70)
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET
+  clientSecret: process.env.CLIENT_SECRET,
+  scopes: "user-read-private user-read-email"
 });
 
 router.post("/playlist/", async (req, res) => {
   // console.log(req.body);
   const user = req.body;
-  // const weather = await axios(
-  //   `https://dark-sky.p.rapidapi.com/${user.longtitude},${user.latitude}?lang=en&units=auto`,
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       "x-rapidapi-host": "dark-sky.p.rapidapi.com",
-  //       "x-rapidapi-key": "0255a54ceemsh45294c7d628c63bp1698e6jsnea8150048dff"
-  //     }
-  //   }
-  // );
-  // const icon = weather.data.currently.icon;
-  // const weatherFixed = weatherTable.find(w => {
-  //   const value = Object.values(w);
-  //   return value[0].includes(icon);
-  // });
-  // const key = Object.keys(weatherFixed).pop();
-  // let seed;
-  // for (let item in seedTable) {
-  //   if (item === weather) seed = seedTable[item];
-  // }
+  const weather = await axios(
+    // `https://dark-sky.p.rapidapi.com/${user.longtitude},${user.latitude}?lang=en&units=auto`,
+    `https://api.darksky.net/forecast/f741040493f931e549408de7bdc46875/${user.longtitude},${user.latitude}`,
+    {
+      method: "GET",
+      headers: {
+        "x-rapidapi-host": "dark-sky.p.rapidapi.com",
+        "x-rapidapi-key": "0255a54ceemsh45294c7d628c63bp1698e6jsnea8150048dff"
+      }
+    }
+  );
+  // { type: "sunny", temperature: "20" }
+  const icon = weather.data.currently.icon;
+  let weatherType = weatherTable.find(w => {
+    const value = Object.values(w);
+    return value[0].includes(icon);
+  });
+  weatherType = Object.keys(weatherType).pop();
+  const weatherInfo = {
+    type: weatherType,
+    temperature: weather.data.currently.temperature
+  };
+  let seedInfo;
+  for (let item in seedTable) {
+    if (item === weatherType) seedInfo = seedTable[item];
+  }
+  seedInfo.seed_genres = [user.genre];
 
   const token = await axios({
     url: "https://accounts.spotify.com/api/token",
@@ -89,16 +97,17 @@ router.post("/playlist/", async (req, res) => {
       password: process.env.CLIENT_SECRET
     }
   });
-  console.log(token.data.access_token);
+  // console.log(token.data);
   spotifyApi.setAccessToken(token.data.access_token);
 
-  const allInfo = await spotifyApi
+  const musicInfo = await spotifyApi
     .getRecommendations(
-      {
-        min_energy: 0.4,
-        seed_genres: ["country"],
-        min_popularity: 0
-      }
+      seedInfo
+      // {
+        // seed_genres: ["country"]
+        // min_energy: 0.4,
+        // min_popularity: 0
+      // }
       // async function(err, data) {
       //   if (err) {
       //     console.error("Something went wrong!", err);
@@ -122,11 +131,13 @@ router.post("/playlist/", async (req, res) => {
           songLength: song.duration_ms
         };
       });
-    })
-
-    
-    console.log(allInfo)
-return res.status(200).send(allInfo)
+    });
+  const allData = {
+    weather: weatherInfo,
+    playlist: musicInfo
+  };
+  // ADD weather: { type: "sunny", temperature: "20" }
+  return res.status(200).send(allData);
 
   // console.log("spotifyApi :", spotifyApi);
   // spotifyApi.getUserPlaylists("Overcast").then(
