@@ -3,12 +3,6 @@ import SpotifyPlayer from "react-spotify-player";
 import { useSelector, useDispatch } from "react-redux";
 import { setWeather, setPlayList, setCurrentMusicURI } from "../redux/redux";
 import Song from "./Song";
-import snowyGif from "../assets/snowy.gif";
-import sunnyGif from "../assets/sunny.gif";
-import windyGif from "../assets/windy.gif";
-import cloudyGif from "../assets/cloudy.gif";
-import rainyGif from "../assets/rainy.gif";
-import nightGif from "../assets/night.gif";
 
 function PlayList(props) {
   const dispatch = useDispatch();
@@ -19,40 +13,6 @@ function PlayList(props) {
     height: "95%"
   };
 
-  const choseBackGround = weatherType => {
-    console.log("weatherType :", weatherType);
-    switch (weatherType) {
-      case "snowy":
-        return snowyGif;
-      case "sunny":
-        return sunnyGif;
-      case "windy":
-        return windyGif;
-      case "cloudy":
-        return cloudyGif;
-      case "rainy":
-        return rainyGif;
-      case "night":
-        return nightGif;
-      default:
-        return sunnyGif;
-    }
-  };
-  // const renderPlayer = () => {
-  //   if (currentMusicURI) {
-  //     return (
-  //       <SpotifyPlayer
-  //         uri={currentMusicURI}
-  //         size={size}
-  //         view="coverart"
-  //         theme="white"
-  //         className="SpotifyPlayer"
-  //       />
-  //     );
-  //   } else {
-  //     return <div>Nothing</div>;
-  //   }
-  // };
   async function postData(url = "", data) {
     const response = await fetch(url, {
       method: "POST",
@@ -80,16 +40,9 @@ function PlayList(props) {
     console.log("req :", req);
     postData("http://localhost:3000/api/playlist", req).then(data => {
       console.log("DATA", data);
-      const weather = data.weather;
       const playList = data.playlist;
-      dispatch(setWeather(weather));
       dispatch(setPlayList(playList));
       dispatch(setCurrentMusicURI(playList[0].songUri));
-      const weatherBackground = document.body.querySelector(".container");
-      console.log("weather.type :", weather.type);
-      weatherBackground.style.backgroundImage = `url(${choseBackGround(
-        weather.type
-      )})`;
     });
   }, [dispatch, props.latitude, props.longitude, selectedGenre]);
 

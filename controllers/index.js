@@ -57,7 +57,7 @@ const spotifyApi = new SpotifyWebApi({
 
 //Weather Endpoint//
 
-router.get("/currentTemp/", async (req, res) => {
+router.post("/currentTemp/", async (req, res) => {
   const user = req.body;
   const weather = await axios(
     `https://api.darksky.net/forecast/04edede39ba708712513c5d698fcddbe/${user.longtitude},${user.latitude}`,
