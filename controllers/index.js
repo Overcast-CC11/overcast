@@ -5,6 +5,7 @@ const router = express.Router();
 require("dotenv").config();
 //spotify web api node library
 const SpotifyWebApi = require("spotify-web-api-node");
+const path = require("path");
 
 const weatherTable = [
   { sunny: ["clear-day"] },
@@ -71,11 +72,28 @@ router.post("/playlist/", async (req, res) => {
     const value = Object.values(w);
     return value[0].includes(icon);
   });
+  const tempFar = weather.data.currently.temperature;
+  console.log(tempFar);
+  const tempCelcius = await axios(
+    `https://congen-temperature-converter-v1.p.rapidapi.com/fahrenheit?to=celsius&value=${tempFar}&decimal=2`,
+    {
+      method: "GET",
+      headers: {
+        "x-rapidapi-host": "congen-temperature-converter-v1.p.rapidapi.com",
+        "x-rapidapi-key": "0255a54ceemsh45294c7d628c63bp1698e6jsnea8150048dff",
+        "content-type": "application/json"
+      }
+    }
+  ).catch(err => {
+    console.log(err);
+  });
+  // console.log(tempFar, typeof tempCelcius);
   weatherType = Object.keys(weatherType).pop();
   const weatherInfo = {
     type: weatherType,
-    temperature: weather.data.currently.temperature
+    temperature: tempCelcius.data.data.resultRaw
   };
+  // console.log(weatherType);
   let seedInfo;
   for (let item in seedTable) {
     if (item === weatherType) seedInfo = seedTable[item];
@@ -101,16 +119,22 @@ router.post("/playlist/", async (req, res) => {
   console.log(token.data);
   spotifyApi.setAccessToken(token.data.access_token);
 
-  const musicInfo = await spotifyApi.getRecommendations(seedInfo).then(data => {
-    return data.body.tracks.map(song => {
-      return {
-        songName: song.name,
-        artistName: song.artists[0].name,
-        songUri: song.uri,
-        songLength: song.duration_ms
-      };
+  const musicInfo = await spotifyApi
+    .getRecommendations(seedInfo)
+    .then(data => {
+      // console.log(data);
+      return data.body.tracks.map(song => {
+        return {
+          songName: song.name,
+          artistName: song.artists[0].name,
+          songUri: song.uri,
+          songLength: song.duration_ms
+        };
+      });
+    })
+    .catch(err => {
+      console.log(err);
     });
-  });
 
   //     const createplaylist = await axios("https://spotifystefan-skliarovv1.p.rapidapi.com/createPlaylist", {
   // 	"method": "POST",

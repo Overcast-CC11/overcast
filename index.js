@@ -1,16 +1,15 @@
-const config = require('./config')
+const config = require("./config");
 // const knex = require('knex')(config.db)
 // const models = require('./models')(knex);
-const apiRouter = require('./controllers')
+const apiRouter = require("./controllers");
 // (models);
-const morgan = require('morgan')
-const bodyParser = require('body-parser')
-const express = require('express');
-const app = express()
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const express = require("express");
+const app = express();
 const path = require("path");
 
-
-app.use(morgan('dev'))
+app.use(morgan("dev"));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -25,10 +24,8 @@ app.use((req, res, next) => {
   next();
 });
 app.use(bodyParser.json({ type: "application/json", limit: "50mb" }));
-app.use('/api', apiRouter)
+app.use("/api", apiRouter);
 app.use(express.static(path.resolve(__dirname, "..", "build")));
-
-
 
 app.use((err, req, res, next) => {
   if (err.stack) {
@@ -38,6 +35,10 @@ app.use((err, req, res, next) => {
 
   console.log(err);
   return res.status(500).send("Internal Error.");
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "..", "build", "index.html"));
 });
 
 app.listen(config.express.port, () => {
