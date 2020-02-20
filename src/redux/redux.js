@@ -4,7 +4,7 @@ const initialState = {
   selectedGenre: null,
   playList: [],
   weather: { type: null, temperature: null },
-  currentMusicURI: null
+  currentMusicURI: "spotify:track:7oiCqfE8Wjk8wf0pFTgL2H"
 };
 
 export const switchView = genre => ({
@@ -43,6 +43,7 @@ export const reducer = (state = initialState, action) => {
         weather: action.weather
       };
     case "SET_CURRENT_MUSIC_URI":
+      console.log("action.currentMusicURI :", action.currentMusicURI);
       return {
         ...state,
         currentMusicURI: action.currentMusicURI
