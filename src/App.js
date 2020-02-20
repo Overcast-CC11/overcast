@@ -62,7 +62,7 @@ function App() {
     };
 
     console.log("req :", req);
-    postData("http://localhost:3000/api/currentTemp", req).then(data => {
+    postData("./api/currentTemp", req).then(data => {
       console.log("DATA", data);
       const weather = data;
       dispatch(setWeather(weather));
