@@ -7,6 +7,7 @@ require("dotenv").config();
 const SpotifyWebApi = require("spotify-web-api-node");
 const path = require("path");
 
+//weather table lookup and spotify seeds//
 const weatherTable = [
   { sunny: ["clear-day"] },
   { rainy: ["rain"] },
@@ -21,36 +22,71 @@ const seedTable = {
     min_acousticness: 0.8,
     max_energy: 0.3,
     max_valence: 0.5,
-    min_popularity: 70
+    min_popularity: 50
   },
   snowy: {
     max_energy: 0.7,
     min_energy: 0.4,
     max_valance: 0.8,
-    min_popularity: 70
+    min_popularity: 50
   },
   cloudy: {
-    max_energy: 0.3,
+    max_energy: 0.4,
     max_danceability: 0.4,
     max_valance: 0.3,
-    min_popularity: 70
+    min_popularity: 40
   },
   windy: {
     max_accousticness: 0.4,
     max_valance: 0.4,
     max_danceability: 0.8,
-    min_popularity: 70
+    min_popularity: 50
   },
   night: { min_valance: 0.8, min_accousticness: 0.7, min_popularity: 70 }
 };
-// Valance(0.5)
-// Popularity (min_70)
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   scope: "user-read-private user-read-email playlist-modify-public"
 });
+
+//Weather Endpoint//
+
+router.get("/currentTemp/", async (req, res) => {
+  const user = req.body;
+  const weather = await axios(
+    // `https://dark-sky.p.rapidapi.com/${user.longtitude},${user.latitude}?lang=en&units=auto`,
+    `https://api.darksky.net/forecast/04edede39ba708712513c5d698fcddbe/${user.longtitude},${user.latitude}`,
+    {
+      method: "GET",
+      headers: {
+        "x-rapidapi-host": "dark-sky.p.rapidapi.com",
+        "x-rapidapi-key": "0255a54ceemsh45294c7d628c63bp1698e6jsnea8150048dff"
+      }
+    }
+  );
+
+  const tempFar = weather.data.currently.temperature;
+  const tempCelcius = await axios(
+    `https://congen-temperature-converter-v1.p.rapidapi.com/fahrenheit?to=celsius&value=${tempFar}&decimal=2`,
+    {
+      method: "GET",
+      headers: {
+        "x-rapidapi-host": "congen-temperature-converter-v1.p.rapidapi.com",
+        "x-rapidapi-key": "0255a54ceemsh45294c7d628c63bp1698e6jsnea8150048dff",
+        "content-type": "application/json"
+      }
+    }
+  ).catch(err => {
+    console.log(err);
+  });
+  const celcius = tempCelcius.data.data.resultRaw;
+  console.log(celcius);
+  return res.status(200).send(celcius);
+});
+
+//playlist Endpoint//
 
 router.post("/playlist/", async (req, res) => {
   // console.log(req.body);
@@ -93,7 +129,7 @@ router.post("/playlist/", async (req, res) => {
     type: weatherType,
     temperature: tempCelcius.data.data.resultRaw
   };
-  // console.log(weatherType);
+  console.log(weatherInfo.temperature);
   let seedInfo;
   for (let item in seedTable) {
     if (item === weatherType) seedInfo = seedTable[item];
