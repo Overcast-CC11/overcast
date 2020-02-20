@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 app.use(bodyParser.json({ type: "application/json", limit: "50mb" }));
 app.use("/api", apiRouter);
-app.use(express.static(path.resolve(__dirname, "..", "build")));
+app.use(express.static(path.resolve(__dirname, "./", "build")));
 
 app.use((err, req, res, next) => {
   if (err.stack) {
@@ -38,7 +38,7 @@ app.use((err, req, res, next) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "..", "build", "index.html"));
+  res.sendFile(path.resolve(__dirname, "./", "build", "index.html"));
 });
 
 app.listen(config.express.port, () => {
