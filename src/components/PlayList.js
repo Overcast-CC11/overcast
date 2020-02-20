@@ -38,7 +38,7 @@ function PlayList(props) {
     // const req2 = { longtitude: "35", latitude: "139", genre: "jazz" };
 
     console.log("req :", req);
-    postData("http://localhost:3000/api/playlist", req).then(data => {
+    postData("./api/playlist", req).then(data => {
       console.log("DATA", data);
       const playList = data.playlist;
       dispatch(setPlayList(playList));

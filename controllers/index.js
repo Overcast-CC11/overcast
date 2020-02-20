@@ -50,8 +50,8 @@ const seedTable = {
 };
 
 const spotifyApi = new SpotifyWebApi({
-  clientId: '8ac26d2b835c41b1adec849f2318f65d',
-  clientSecret: '2e40df4b967346a39a1af50e1a785308',
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
   scope: "user-read-private user-read-email playlist-modify-public"
 });
 
