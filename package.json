@@ -23,7 +23,7 @@
     "spotify-web-api-node": "^4.0.0"
   },
   "scripts": {
-    "start": "react-scripts build && node index.js",
+    "start": "node index.js",
     "react": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
