@@ -48,7 +48,7 @@ const seedTable = {
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  scopes: "user-read-private user-read-email"
+  scope: "user-read-private user-read-email playlist-modify-public"
 });
 
 router.post("/playlist/", async (req, res) => {
@@ -86,7 +86,8 @@ router.post("/playlist/", async (req, res) => {
     url: "https://accounts.spotify.com/api/token",
     method: "post",
     params: {
-      grant_type: "client_credentials"
+      grant_type: "client_credentials",
+      scope: "user-read-private user-read-email playlist-modify-public"
     },
     headers: {
       Accept: "application/json",
@@ -97,47 +98,62 @@ router.post("/playlist/", async (req, res) => {
       password: process.env.CLIENT_SECRET
     }
   });
-  // console.log(token.data);
+  console.log(token.data);
   spotifyApi.setAccessToken(token.data.access_token);
 
-  const musicInfo = await spotifyApi
-    .getRecommendations(
-      seedInfo
-      // {
-        // seed_genres: ["country"]
-        // min_energy: 0.4,
-        // min_popularity: 0
-      // }
-      // async function(err, data) {
-      //   if (err) {
-      //     console.error("Something went wrong!", err);
-      //   } else {
-
-      // console.log("song_name", data.body.tracks[0].name);
-      // console.log("name", data.body.tracks[0].artists[0].name);
-      // console.log("uri", data.body.tracks[0].uri);
-      // console.log("duration_ms", data.body.tracks[0].duration_ms);
-      // playList = await data.body;
-      //     return data;
-      //   }
-      // }
-    )
-    .then(data => {
-      return data.body.tracks.map(song => {
-        return {
-          songName: song.name,
-          artistName: song.artists[0].name,
-          songUri: song.uri,
-          songLength: song.duration_ms
-        };
-      });
+  const musicInfo = await spotifyApi.getRecommendations(seedInfo).then(data => {
+    return data.body.tracks.map(song => {
+      return {
+        songName: song.name,
+        artistName: song.artists[0].name,
+        songUri: song.uri,
+        songLength: song.duration_ms
+      };
     });
+  });
+
+  //     const createplaylist = await axios("https://spotifystefan-skliarovv1.p.rapidapi.com/createPlaylist", {
+  // 	"method": "POST",
+  // 	"headers": {
+  // 		"x-rapidapi-host": "Spotifystefan-skliarovV1.p.rapidapi.com",
+  // 		"x-rapidapi-key": "0255a54ceemsh45294c7d628c63bp1698e6jsnea8150048dff",
+  // 		"content-type": "application/x-www-form-urlencoded"
+  // 	},
+  // 	"body": {}
+  // })
+  // .then(response => {
+  // 	console.log(response);
+  // })
+  // .catch(err => {
+  // 	console.log(err);
+  // });
+
   const allData = {
     weather: weatherInfo,
     playlist: musicInfo
   };
+
   // ADD weather: { type: "sunny", temperature: "20" }
   return res.status(200).send(allData);
+
+  const playlist = await fetch(
+    "https://spotifystefan-skliarovv1.p.rapidapi.com/createPlaylist",
+    {
+      method: "POST",
+      headers: {
+        "x-rapidapi-host": "Spotifystefan-skliarovV1.p.rapidapi.com",
+        "x-rapidapi-key": "0255a54ceemsh45294c7d628c63bp1698e6jsnea8150048dff",
+        "content-type": "application/x-www-form-urlencoded"
+      },
+      body: {}
+    }
+  )
+    .then(response => {
+      console.log(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 
   // console.log("spotifyApi :", spotifyApi);
   // spotifyApi.getUserPlaylists("Overcast").then(
