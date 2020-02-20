@@ -6,7 +6,9 @@ import logo from "../assets/logo.png";
 function Header() {
   const dispatch = useDispatch();
   const weather = useSelector(state => state.weather);
-
+  const temperatureStr = weather.temperature
+    ? Math.round(weather.temperature) + "°c"
+    : "";
   return (
     <div className="header">
       <div className="logoName" onClick={() => dispatch(switchView(null))}>
@@ -16,12 +18,11 @@ function Header() {
 
       <div className="genreWeather">
         <div className="selectedGenre">
-          {" "}
           <i>{useSelector(state => state.selectedGenre)}</i>
         </div>
         <div className="weather">
           <h3>
-            {weather.type} {weather.temperature}°c
+            {weather.type} {temperatureStr}
           </h3>
         </div>
       </div>
