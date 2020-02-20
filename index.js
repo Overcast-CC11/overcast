@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 app.use(bodyParser.json({ type: "application/json", limit: "50mb" }));
 app.use("/api", apiRouter);
-app.use(express.static(path.resolve(__dirname, "..", "build")));
+app.use(express.static(path.resolve(__dirname, "../overcast", "build")));
 
 app.use((err, req, res, next) => {
   if (err.stack) {
