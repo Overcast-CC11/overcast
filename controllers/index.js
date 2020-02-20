@@ -17,30 +17,34 @@ const weatherTable = [
   { night: ["clear-night", "partly-cloudy-night"] }
 ];
 const seedTable = {
-  sunny: { min_danceability: 0.8, min_energy: 0.9, min_popularity: 70 },
+  sunny: {
+    min_danceability: 0.8,
+    min_energy: 0.9
+    // min_popularity: 70
+  },
   rainy: {
     min_acousticness: 0.8,
     max_energy: 0.3,
-    max_valence: 0.5,
-    min_popularity: 50
+    max_valence: 0.5
+    // min_popularity: 50
   },
   snowy: {
     max_energy: 0.7,
     min_energy: 0.4,
-    max_valance: 0.8,
-    min_popularity: 50
+    max_valance: 0.8
+    // min_popularity: 50
   },
   cloudy: {
-    max_energy: 0.4,
-    max_danceability: 0.4,
-    max_valance: 0.3,
-    min_popularity: 40
+    // max_energy: 0.5,
+    // max_danceability: 0.5
+    max_valance: 0.4
+    // min_popularity: 40
   },
   windy: {
     max_accousticness: 0.4,
     max_valance: 0.4,
-    max_danceability: 0.8,
-    min_popularity: 50
+    max_danceability: 0.8
+    // min_popularity: 50
   },
   night: { min_valance: 0.8, min_accousticness: 0.7, min_popularity: 70 }
 };
@@ -56,7 +60,6 @@ const spotifyApi = new SpotifyWebApi({
 router.get("/currentTemp/", async (req, res) => {
   const user = req.body;
   const weather = await axios(
-    // `https://dark-sky.p.rapidapi.com/${user.longtitude},${user.latitude}?lang=en&units=auto`,
     `https://api.darksky.net/forecast/04edede39ba708712513c5d698fcddbe/${user.longtitude},${user.latitude}`,
     {
       method: "GET",
@@ -82,7 +85,6 @@ router.get("/currentTemp/", async (req, res) => {
     console.log(err);
   });
   const celcius = tempCelcius.data.data.resultRaw;
-  console.log(celcius);
   return res.status(200).send(celcius);
 });
 
@@ -158,7 +160,7 @@ router.post("/playlist/", async (req, res) => {
   const musicInfo = await spotifyApi
     .getRecommendations(seedInfo)
     .then(data => {
-      // console.log(data);
+      console.log(data.body.tracks);
       return data.body.tracks.map(song => {
         return {
           songName: song.name,
