@@ -69,8 +69,13 @@ router.get("/currentTemp/", async (req, res) => {
       }
     }
   );
-
+  const icon = weather.data.currently.icon;
+  let weatherType = weatherTable.find(w => {
+    const value = Object.values(w);
+    return value[0].includes(icon);
+  });
   const tempFar = weather.data.currently.temperature;
+  console.log(tempFar);
   const tempCelcius = await axios(
     `https://congen-temperature-converter-v1.p.rapidapi.com/fahrenheit?to=celsius&value=${tempFar}&decimal=2`,
     {
@@ -84,8 +89,13 @@ router.get("/currentTemp/", async (req, res) => {
   ).catch(err => {
     console.log(err);
   });
-  const celcius = tempCelcius.data.data.resultRaw;
-  return res.status(200).send(celcius);
+  weatherType = Object.keys(weatherType).pop();
+  const weatherInfo = {
+    type: weatherType,
+    temperature: tempCelcius.data.data.resultRaw
+  };
+  console.log(weatherInfo);
+  return res.status(200).send(weatherInfo);
 });
 
 //playlist Endpoint//
