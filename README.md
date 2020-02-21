@@ -66,7 +66,15 @@ Runs the app in the development mode and reload, automatically.
 
 ## Team overcast
 
-- Max Turer, Tech Lead: [github: https://github.com/caxwel]x[linkedin: http://www.linkedin.com/in/maxturer]
-- Sachi Grannan, Backend Lead: [github: https://github.com/sachix1001]x[linkedin: http://www.linkedin.com/in/sachi-grannan-03aa4418b]
-- Miki Masumoto: [github: https://github.com/masumomo]x[linkedin: http://www.linkedin.com/in/miki-masumoto-387aa213b]
-- Kan Phongjaroenwit: [github: https://github.com/kan4e4]x[linkedin: http://www.linkedin.com/in/contactkan]
+- Max Turer, Tech Lead: <br/>
+  github: [https://github.com/caxwel]<br/>
+  linkedin: [http://www.linkedin.com/in/maxturer]
+- Sachi Grannan, Backend Lead: <br/>
+  github: [https://github.com/sachix1001]<br/>
+  linkedin: [http://www.linkedin.com/in/sachi-grannan-03aa4418b]
+- Miki Masumoto: <br/>
+  github: [https://github.com/masumomo]<br/>
+  linkedin: [http://www.linkedin.com/in/miki-masumoto-387aa213b]
+- Kan Phongjaroenwit: <br/>
+  github: [https://github.com/kan4e4]<br/>
+  linkedin: [http://www.linkedin.com/in/contactkan]
