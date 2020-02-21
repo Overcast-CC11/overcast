@@ -63,3 +63,10 @@ Runs the app in the development mode and reload, automatically.
 - Dark Sky : Rakuten Rapid API [https://api.rakuten.net/darkskyapis/api/dark-sky]
 - Temperature Converter : Rakuten Rapid API [https://api.rakuten.net/ConGen/api/temperature-converter]
 - Spotify [https://developer.spotify.com/documentation/web-api/]
+
+## Team overcast
+
+- Max Turer, Tech Lead: [github: https://github.com/caxwel]x[linkedin: http://www.linkedin.com/in/maxturer]
+- Sachi Grannan, Backend Lead: [github: https://github.com/sachix1001]x[linkedin: http://www.linkedin.com/in/sachi-grannan-03aa4418b]
+- Miki Masumoto: [github: https://github.com/masumomo]x[linkedin: http://www.linkedin.com/in/miki-masumoto-387aa213b]
+- Kan Phongjaroenwit: [github: https://github.com/kan4e4]x[linkedin: http://www.linkedin.com/in/contactkan]
