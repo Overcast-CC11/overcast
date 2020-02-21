@@ -18,8 +18,8 @@ const weatherTable = [
 ];
 const seedTable = {
   sunny: {
-    min_danceability: 0.8,
-    min_energy: 0.9
+    min_danceability: 0.7,
+    min_energy: 0.5
     // min_popularity: 70
   },
   rainy: {
@@ -147,6 +147,10 @@ router.post("/playlist/", async (req, res) => {
     if (item === weatherType) seedInfo = seedTable[item];
   }
   seedInfo.seed_genres = [user.genre];
+  if(seedInfo.seed_genres == 'metal'){
+    seedInfo.min_danceability= 0
+    
+  }
 
   const token = await axios({
     url: "https://accounts.spotify.com/api/token",
@@ -164,7 +168,7 @@ router.post("/playlist/", async (req, res) => {
       password: process.env.CLIENT_SECRET
     }
   });
-  console.log(token.data);
+  // console.log(token.data);
   spotifyApi.setAccessToken(token.data.access_token);
 
   const musicInfo = await spotifyApi
