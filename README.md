@@ -71,10 +71,10 @@ Runs the app in the development mode and reload, automatically.
   linkedin: [http://www.linkedin.com/in/maxturer]
 - Sachi Grannan, Backend Lead: <br/>
   github: [https://github.com/sachix1001]<br/>
-  linkedin: [http://www.linkedin.com/in/sachi-grannan-03aa4418b]
+  linkedin: [http://www.linkedin.com/in/sachi-grannan]
 - Miki Masumoto: <br/>
   github: [https://github.com/masumomo]<br/>
-  linkedin: [http://www.linkedin.com/in/miki-masumoto-387aa213b]
+  linkedin: [http://www.linkedin.com/in/miki-masumoto]
 - Kan Phongjaroenwit: <br/>
   github: [https://github.com/kan4e4]<br/>
   linkedin: [http://www.linkedin.com/in/contactkan]
