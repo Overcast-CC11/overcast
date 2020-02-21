@@ -1,8 +1,8 @@
 # overcast
 
-overcast is a music recommendation app by weather and music genres
+overcast is a music recommendation app by weather and music genres.
 
-Demo is here (https://quiet-sea-34007.herokuapp.com/)
+Demo is here [https://quiet-sea-34007.herokuapp.com/]
 
 This was developed during my time as a student at Code Chrysalis.
 
@@ -32,6 +32,8 @@ yarn build
 yarn start
 ```
 
+And open [http://localhost:3000]
+
 ### `yarn start`
 
 ## Available Scripts
@@ -56,6 +58,6 @@ Runs the app in the development mode and reload, automatically.
 
 ## API we used
 
-- Dark Sky : Rakuten Rapid API (https://api.rakuten.net/darkskyapis/api/dark-sky)
-- Temperature Converter : Rakuten Rapid API (https://api.rakuten.net/ConGen/api/temperature-converter)
-- Spotify (https://developer.spotify.com/documentation/web-api/)
+- Dark Sky : Rakuten Rapid API [https://api.rakuten.net/darkskyapis/api/dark-sky]
+- Temperature Converter : Rakuten Rapid API [https://api.rakuten.net/ConGen/api/temperature-converter]
+- Spotify [https://developer.spotify.com/documentation/web-api/]
