@@ -36,8 +36,6 @@ yarn start
 
 And open [http://localhost:3000]
 
-### `yarn start`
-
 ## Available Scripts
 
 In the project directory, you can run:
