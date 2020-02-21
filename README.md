@@ -1,3 +1,5 @@
+![Image of screenshot](./screenshot.png)
+
 # overcast
 
 overcast is a music recommendation app by weather and music genres.
