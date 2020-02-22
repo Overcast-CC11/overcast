@@ -24,7 +24,7 @@ const seedTable = {
   },
   rainy: {
     min_acousticness: 0.8,
-    max_energy: 0.3,
+    max_energy: 0.5,
     max_valence: 0.5
     // min_popularity: 50
   },
@@ -46,7 +46,7 @@ const seedTable = {
     max_danceability: 0.8
     // min_popularity: 50
   },
-  night: { min_valance: 0.8, min_accousticness: 0.7, min_popularity: 70 }
+  night: { min_valance: 0.8, min_accousticness: 0.7 }
 };
 
 const spotifyApi = new SpotifyWebApi({
@@ -91,7 +91,7 @@ router.post("/currentTemp/", async (req, res) => {
   });
   weatherType = Object.keys(weatherType).pop();
   const weatherInfo = {
-    type: weatherType,
+    type: 'night',
     temperature: tempCelcius.data.data.resultRaw
   };
   console.log(weatherInfo);
@@ -138,7 +138,7 @@ router.post("/playlist/", async (req, res) => {
   // console.log(tempFar, typeof tempCelcius);
   weatherType = Object.keys(weatherType).pop();
   const weatherInfo = {
-    type: weatherType,
+    type: 'night',
     temperature: tempCelcius.data.data.resultRaw
   };
   console.log(weatherInfo.temperature);
@@ -174,7 +174,7 @@ router.post("/playlist/", async (req, res) => {
   const musicInfo = await spotifyApi
     .getRecommendations(seedInfo)
     .then(data => {
-      console.log(data.body.tracks);
+      // console.log(data.body.tracks);
       return data.body.tracks.map(song => {
         return {
           songName: song.name,
