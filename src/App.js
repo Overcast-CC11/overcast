@@ -18,7 +18,6 @@ function App() {
   const dispatch = useDispatch();
 
   const choseBackGround = weatherType => {
-    console.log("weatherType :", weatherType);
     switch (weatherType) {
       case "snowy":
         return snowyGif;
@@ -50,8 +49,6 @@ function App() {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(pos => {
-      console.log(`Latitude : ${pos.coords.latitude}`);
-      console.log(`Longitude: ${pos.coords.longitude}`);
       setLatitude(pos.coords.latitude);
       setLongitude(pos.coords.longitude);
     });
@@ -63,11 +60,9 @@ function App() {
 
     console.log("req :", req);
     postData("./api/currentTemp", req).then(data => {
-      console.log("DATA", data);
       const weather = data;
       dispatch(setWeather(weather));
       const weatherBackground = document.body.querySelector(".container");
-      console.log("weather.type :", weather.type);
       weatherBackground.style.backgroundImage = `url(${choseBackGround(
         weather.type
       )})`;

@@ -1,8 +1,5 @@
 const config = require("./config");
-// const knex = require('knex')(config.db)
-// const models = require('./models')(knex);
 const apiRouter = require("./controllers");
-// (models);
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const express = require("express");
