@@ -1,12 +1,12 @@
+This was developed during my time as a student at Code Chrysalis.
 ![Image of screenshot](./screenshot.png)
 
 # overcast
 
-overcast is a music recommendation app by weather and music genres.
+overcast is a music recommendation app by current weather and music genres.
 
 Demo is here [https://quiet-sea-34007.herokuapp.com/]
 
-This was developed during my time as a student at Code Chrysalis.
 
 ## How to get started
 
